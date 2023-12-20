@@ -1,3 +1,6 @@
+import { Session, sessionListGenerator } from "@/pages/api/SessionGenerator";
+import { gridCoordinatesPerDayRow } from "@/pages/api/gridCoords";
+
 export type Day = "Mon" | "Tue" | "Wed" | "Thur" | "Fri" | "Sat" | "Sun";
 export type TimeSlot =
 	| "10:00"
@@ -11,16 +14,58 @@ export type TimeSlot =
 	| "14:00"
 	| "14:30"
 	| "15:00";
-export type SlotNum = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
+export type SlotNum =
+	| 1
+	| 2
+	| 3
+	| 4
+	| 5
+	| 6
+	| 7
+	| 8
+	| 9
+	| 10
+	| 11
+	| 12
+	| 13
+	| 14
+	| 15
+	| 16
+	| 17
+	| 18
+	| 19
+	| 20
+	| 21
+	| 22
+	| 23
+	| 24
+	| 25
+	| 26
+	| 27
+	| 28
+	| 29
+	| 30
+	| 31
+	| 32
+	| 33
+	| 34
+	| 35
+	| 36;
 
 export const config: {
 	numDays: number;
 	daysToShow: Day[];
+	tempslotStart: number;
+	slotsPerHour: number;
+	lastAvailableSlotNum: number;
 	slotTimes: TimeSlot[];
 	slotNumbers: SlotNum[];
 } = {
 	numDays: 7,
 	daysToShow: ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"],
+	tempslotStart: 20,
+	slotsPerHour: 2,
+	lastAvailableSlotNum: 30,
 	slotTimes: [
 		"10:00",
 		"10:30",
@@ -34,13 +79,15 @@ export const config: {
 		"14:30",
 		"15:00",
 	],
-	slotNumbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+	slotNumbers: [
+		1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+		22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36,
+	],
 };
 
 type SubRow = {
-	day: Day;
-	id: string;
-	subRowIndex: number;
+	index: number;
+	subRowMap: Map<number, Session>;
 };
 
 export type StaticDayRow = {
@@ -56,35 +103,24 @@ export const StaticDayRowGenerator = (): StaticDayRow[] => {
 			id: day,
 			subRows:
 				day === "Mon"
-					? [
-							{
-								day: day,
-								id: day,
-								subRowIndex: 0,
-							},
-							{
-								day: day,
-								id: day,
-								subRowIndex: 1,
-							},
-							{
-								day: day,
-								id: day,
-								subRowIndex: 2,
-							},
-					  ]
+					? gridCoordinatesPerDayRow(sessionListGenerator("Mon"), config).map(
+							(map, index) => {
+								return {
+									index: index,
+									subRowMap: map,
+								};
+							}
+					  )
 					: [
 							{
-								day: day,
-								id: day,
-								subRowIndex: 0,
+								index: 0,
+								subRowMap: new Map(),
 							},
 					  ],
 		};
 
 		return row;
 	});
-	console.log("dayRows", dayRows);
+
 	return dayRows;
 };
-

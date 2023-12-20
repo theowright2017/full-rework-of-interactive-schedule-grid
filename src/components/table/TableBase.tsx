@@ -9,7 +9,7 @@ import React, { useState } from "react";
 
 import styles from "../../styles/Table.module.scss";
 import { columnGenerator } from "./ColumnGenerator";
-import {  StaticDayRow, config, StaticDayRowGenerator } from "./RowGenerator";
+import { StaticDayRow, config, StaticDayRowGenerator } from "./RowGenerator";
 
 interface Props {
 	children: (table: Table<StaticDayRow>) => React.JSX.Element[];
@@ -24,19 +24,12 @@ const TableBase = (props: Props) => {
 		data,
 		columns,
 		getCoreRowModel: getCoreRowModel(),
-		getSubRows: (row: StaticDayRow) => {
-			if (row.subRows) {
-				return row.subRows
-			} else {
-				return []
-			}
-		}
 	});
 
 	return (
 		<div id={"table-container"}>
 			<div className={styles.table_wrap} style={{ height: "300px" }}>
-				<table style={{borderCollapse: 'collapse'}}>
+				<table style={{ borderCollapse: "collapse" }}>
 					<thead>
 						{table.getHeaderGroups().map((headerGroup) => (
 							<tr key={headerGroup.id}>
@@ -54,9 +47,11 @@ const TableBase = (props: Props) => {
 										</th>
 									);
 								})}
-                                {config.slotTimes.map((time) => (
-                                    <th key={time} style={{width: '50px'}}>{time}</th>
-                                ))}
+								{config.slotTimes.map((time) => (
+									<th key={time} style={{ width: "50px" }}>
+										{time}
+									</th>
+								))}
 							</tr>
 						))}
 					</thead>
