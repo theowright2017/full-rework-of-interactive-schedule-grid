@@ -1,45 +1,23 @@
 import { Session } from "@/pages/api/SessionGenerator";
 import {
-	Table,
-	flexRender,
-	getCoreRowModel,
-	useReactTable,
-} from "@tanstack/react-table";
-import {
 	Day,
 	StaticDayRow,
 	SlotNum,
 	config,
 	SubRow,
 } from "../table/RowGenerator";
-import { Virtualizer, useVirtualizer } from "@tanstack/react-virtual";
-import { useState, useRef, UIEvent, useEffect } from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { useRef } from "react";
 import { columnGenerator } from "../table/ColumnGenerator";
 import styles from "../../styles/Table.module.scss";
 
-type VirtualDims = {
-	start: number;
-	index: number;
-	size: number;
-};
 type Props = {
 	allSubRows: SubRow[];
 	data: StaticDayRow[];
 };
 
 const ScheduleGrid = (props: Props) => {
-	const [data, setData] = useState(() => props.data);
-
-	const [columns] = useState(() => [...columnGenerator()]);
-
-	const table = useReactTable({
-		data,
-		columns,
-		getCoreRowModel: getCoreRowModel(),
-	});
-
 	const containerRef = useRef<HTMLDivElement>(null);
-	const leftColumnRef = useRef<HTMLDivElement | null>(null);
 
 	const virtualizer = useVirtualizer({
 		count: props.allSubRows.length || 1,
@@ -48,15 +26,9 @@ const ScheduleGrid = (props: Props) => {
 		overscan: 5,
 	});
 
-	useEffect(() => {
-		console.log("VIRTUAL");
-		console.log("");
-	});
-
-	const { rows } = table.getRowModel();
+	const rows = props.data;
 	const virtualRows = virtualizer.getVirtualItems();
 
-	console.log("left scroll", leftColumnRef.current?.clientTop);
 	return (
 		<div style={{ display: "flex", height: "300px", overflow: "auto" }}>
 			<div
@@ -70,7 +42,7 @@ const ScheduleGrid = (props: Props) => {
 				>
 					<table style={{ borderCollapse: "collapse" }}>
 						<thead>
-							{table.getHeaderGroups().map((headerGroup) => (
+							{[...columnGenerator()].map((headerGroup) => (
 								<tr
 									key={headerGroup.id}
 									style={{
@@ -94,10 +66,6 @@ const ScheduleGrid = (props: Props) => {
 							{virtualRows.map((virtualRow, virtualIndex) => {
 								const subRow = props.allSubRows[virtualRow.index];
 
-								// let day = subRow
-
-								// const rowsOfDay = virtualRows.length * 20
-
 								return (
 									<tr
 										key={virtualRow.index}
@@ -109,20 +77,18 @@ const ScheduleGrid = (props: Props) => {
 										}}
 									>
 										{virtualIndex === 0 ? (
-											<td
-											// rowSpan={virtualizer.getVirtualItems().length}
-											>
+											<td>
 												<div
 													style={{
 														backgroundColor: "lightblue",
 														height: "20px",
 														borderBottom: "1px solid lightblue",
-														borderLeft: '1px solid red',
-														borderRight: '1px solid red',
-														borderTop: '1px solid red'
+														borderLeft: "1px solid red",
+														borderRight: "1px solid red",
+														borderTop: "1px solid red",
 													}}
 												>
-													{rows[subRow.dayIndex].original.day}
+													{rows[subRow.dayIndex].day}
 												</div>
 											</td>
 										) : subRow.index === 0 ? (
@@ -132,23 +98,27 @@ const ScheduleGrid = (props: Props) => {
 														backgroundColor: "lightblue",
 														height: "20px",
 														borderBottom: "1px solid lightblue",
-														borderLeft: '1px solid red',
-														borderRight: '1px solid red',
-														borderTop: '1px solid red'
+														borderLeft: "1px solid red",
+														borderRight: "1px solid red",
+														borderTop: "1px solid red",
 													}}
 												>
-													{rows[subRow.dayIndex].original.day}
+													{rows[subRow.dayIndex].day}
 												</div>
 											</td>
 										) : (
-											<td><div style={{
-												backgroundColor: "lightblue",
+											<td>
+												<div
+													style={{
+														backgroundColor: "lightblue",
 														height: "20px",
 														borderBottom: "1px solid lightblue",
-														borderLeft: '1px solid red',
-														borderRight: '1px solid red',
+														borderLeft: "1px solid red",
+														borderRight: "1px solid red",
 														borderTop: "1px solid lightblue",
-											}}/></td>
+													}}
+												/>
+											</td>
 										)}
 										{Array.from(
 											{
@@ -163,8 +133,6 @@ const ScheduleGrid = (props: Props) => {
 											const item = slotHasItem
 												? subRowMap.get(slotNum as number)
 												: undefined;
-
-									
 
 											if (virtualIndex === 0) {
 												console.log(" new day");
