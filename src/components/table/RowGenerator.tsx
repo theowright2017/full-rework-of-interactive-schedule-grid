@@ -51,7 +51,7 @@ export type SlotNum =
 	| 34
 	| 35
 	| 36;
-
+// , "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"
 export const config: {
 	numDays: number;
 	daysToShow: Day[];
@@ -62,7 +62,7 @@ export const config: {
 	slotNumbers: SlotNum[];
 } = {
 	numDays: 7,
-	daysToShow: ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"],
+	daysToShow: ["Mon", "Tue", "Wed", "Thur"],
 	tempslotStart: 20,
 	slotsPerHour: 2,
 	lastAvailableSlotNum: 30,
@@ -85,15 +85,16 @@ export const config: {
 	],
 };
 
-type SubRow = {
+export type SubRow = {
 	index: number;
 	subRowMap: Map<number, Session>;
+	dayIndex: number;
 };
 
 export type StaticDayRow = {
 	day: Day;
 	id: string;
-	subRows?: SubRow[];
+	subRows: SubRow[];
 };
 
 export const StaticDayRowGenerator = (): StaticDayRow[] => {
@@ -101,22 +102,16 @@ export const StaticDayRowGenerator = (): StaticDayRow[] => {
 		const row: StaticDayRow = {
 			day: day,
 			id: day,
-			subRows:
-				day === "Mon"
-					? gridCoordinatesPerDayRow(sessionListGenerator("Mon"), config).map(
-							(map, index) => {
-								return {
-									index: index,
-									subRowMap: map,
-								};
-							}
-					  )
-					: [
-							{
-								index: 0,
-								subRowMap: new Map(),
-							},
-					  ],
+			subRows: gridCoordinatesPerDayRow(
+				sessionListGenerator(day, 1000 - 100 * rowIndex),
+				config
+			).map((map, index) => {
+				return {
+					index: index,
+					subRowMap: map,
+					dayIndex: rowIndex,
+				};
+			}),
 		};
 
 		return row;

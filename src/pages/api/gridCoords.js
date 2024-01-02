@@ -5,7 +5,7 @@ export function gridCoordinatesPerDayRow(sessionsForDay, config) {
 
 	function subRowContents() {
 		return {
-			sessionsInSubRow: new Map(),
+			sessionsInSubRowMap: new Map(),
 			unavailableSlotRanges: [],
 		};
 	}
@@ -27,8 +27,9 @@ export function gridCoordinatesPerDayRow(sessionsForDay, config) {
 		subRowLoop: for (const [index, contents] of [
 			...subRowToContentsMap.entries(),
 		]) {
-			const { sessionsInSubRow, unavailableSlotRanges } = contents;
+			const { sessionsInSubRowMap, unavailableSlotRanges } = contents;
 
+			/** every could be changed to some ?? */
 			const canFitInSubRow = unavailableSlotRanges.every((range) => {
 				const [start, end] = range;
 
@@ -39,9 +40,9 @@ export function gridCoordinatesPerDayRow(sessionsForDay, config) {
 			});
 
 			if (canFitInSubRow) {
-				sessionsInSubRow.set(sessionStartSlot, session);
+				sessionsInSubRowMap.set(sessionStartSlot, session);
 				subRowToContentsMap.set(index, {
-					sessionsInSubRow: sessionsInSubRow,
+					sessionsInSubRowMap: sessionsInSubRowMap,
 					unavailableSlotRanges: [
 						...unavailableSlotRanges,
 						[sessionStartSlot, sessionEndSlot],
@@ -50,7 +51,7 @@ export function gridCoordinatesPerDayRow(sessionsForDay, config) {
 				continue sessionLoop;
 			} else if (subRowToContentsMap.size === index + 1) {
 				subRowToContentsMap.set(index + 1, {
-					sessionsInSubRow: new Map([[sessionStartSlot, session]]),
+					sessionsInSubRowMap: new Map([[sessionStartSlot, session]]),
 					unavailableSlotRanges: [[sessionStartSlot, sessionEndSlot]],
 				});
 			}
@@ -58,6 +59,6 @@ export function gridCoordinatesPerDayRow(sessionsForDay, config) {
 	}
 
 	return [...subRowToContentsMap.values()].map(
-		(content) => content.sessionsInSubRow
+		(content) => content.sessionsInSubRowMap
 	);
 }
