@@ -30,32 +30,23 @@ const ScheduleGrid = (props: Props) => {
 	const virtualRows = virtualizer.getVirtualItems();
 
 	return (
-		<div style={{ display: "flex", height: "300px", overflow: "auto" }}>
+		<div className={styles.grid_wrapper}>
 			<div
 				id={"table-container"}
-				style={{ height: "100%", overflow: "auto" }}
+				className={styles.table_container}
 				ref={containerRef}
 			>
 				<div
 					className={styles.table_wrap}
 					style={{ height: `${virtualizer.getTotalSize()}px` }}
 				>
-					<table style={{ borderCollapse: "collapse" }}>
+					<table className={styles.table}>
 						<thead>
 							{[...columnGenerator()].map((headerGroup) => (
-								<tr
-									key={headerGroup.id}
-									style={{
-										position: "sticky",
-										top: 0,
-										left: 0,
-										backgroundColor: "lightgrey",
-										zIndex: 2,
-									}}
-								>
-									<th style={{ width: "50px" }}>Day</th>
+								<tr key={headerGroup.id} className={styles.header_row}>
+									<th className={styles.header_cell}>Day</th>
 									{config.slotTimes.map((time) => (
-										<th key={time} style={{ width: "50px" }}>
+										<th key={time} className={styles.header_cell}>
 											{time}
 										</th>
 									))}
@@ -69,6 +60,7 @@ const ScheduleGrid = (props: Props) => {
 								return (
 									<tr
 										key={virtualRow.index}
+										className={styles.grid_row}
 										style={{
 											height: `${virtualRow.size}px`,
 											transform: `translateY(${
@@ -76,48 +68,15 @@ const ScheduleGrid = (props: Props) => {
 											}px)`,
 										}}
 									>
-										{virtualIndex === 0 ? (
+										{subRow.index === 0 ? (
 											<td>
-												<div
-													style={{
-														backgroundColor: "lightblue",
-														height: "20px",
-														borderBottom: "1px solid lightblue",
-														borderLeft: "1px solid red",
-														borderRight: "1px solid red",
-														borderTop: "1px solid red",
-													}}
-												>
-													{rows[subRow.dayIndex].day}
-												</div>
-											</td>
-										) : subRow.index === 0 ? (
-											<td>
-												<div
-													style={{
-														backgroundColor: "lightblue",
-														height: "20px",
-														borderBottom: "1px solid lightblue",
-														borderLeft: "1px solid red",
-														borderRight: "1px solid red",
-														borderTop: "1px solid red",
-													}}
-												>
+												<div className={styles.day_title_cell}>
 													{rows[subRow.dayIndex].day}
 												</div>
 											</td>
 										) : (
 											<td>
-												<div
-													style={{
-														backgroundColor: "lightblue",
-														height: "20px",
-														borderBottom: "1px solid lightblue",
-														borderLeft: "1px solid red",
-														borderRight: "1px solid red",
-														borderTop: "1px solid lightblue",
-													}}
-												/>
+												<div className={styles.day_blank_cell} />
 											</td>
 										)}
 										{Array.from(
@@ -134,14 +93,10 @@ const ScheduleGrid = (props: Props) => {
 												? subRowMap.get(slotNum as number)
 												: undefined;
 
-											if (virtualIndex === 0) {
-												console.log(" new day");
-											}
-
 											return (
 												<td
 													key={`slotCell_${slotIndex}`}
-													style={{ overflow: "visbile" }}
+													className={styles.data_cell}
 												>
 													<SlotCell slot={slotNum as SlotNum} item={item} />
 												</td>
@@ -164,31 +119,11 @@ const DayCell = ({ day }: { day: string }) => <div>{day}</div>;
 const SlotCell = ({ slot, item }: { slot: SlotNum; item?: Session }) => {
 	if (item) {
 		return (
-			<div style={{ overflow: "visible", width: "50px", height: "20px" }}>
-				<div
-					style={{
-						width: "100px",
-						backgroundColor: "lightseagreen",
-						zIndex: 100,
-						position: "relative",
-						border: "1px solid black",
-					}}
-				>
-					Session {item.id}
-				</div>
+			<div className={styles.session_card}>
+				<div className={styles.session_contents}>Session {item.id}</div>
 			</div>
 		);
 	} else {
-		return (
-			<div
-				style={{
-					backgroundColor: "coral",
-					border: "1px solid black",
-					height: "20px",
-				}}
-			>
-				Slot
-			</div>
-		);
+		return <div className={styles.empty_cell}>Slot</div>;
 	}
 };
