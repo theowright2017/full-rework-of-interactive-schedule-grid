@@ -103,7 +103,7 @@ export const StaticDayRowGenerator = (): StaticDayRow[] => {
 			day: day,
 			id: day,
 			subRows: gridCoordinatesPerDayRow(
-				sessionListGenerator(day, 1000 - 100 * rowIndex),
+				sessionListGenerator(day, 300),
 				config
 			).map((map, index) => {
 				return {

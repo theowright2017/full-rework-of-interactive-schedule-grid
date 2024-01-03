@@ -52,13 +52,32 @@ $dayCellBorder: red;
 	}
 }
 
+.grid_row,
+.day_blank_cell,
+.day_title_cell,
+.grid_cell {
+	&.rowOpen {
+		height: 120px;
+	}
+
+	&.rowClosed {
+		height: 80px;
+	}
+}
+
 .data_cell {
 	overflow: visible;
 
 	.session_card {
 		overflow: visible;
 		width: 50px;
-		height: 20px;
+
+		&.cardOpen {
+			height: 120px;
+		}
+		&.cardClosed {
+			height: 80px;
+		}
 	}
 
 	.session_contents {
@@ -67,11 +86,12 @@ $dayCellBorder: red;
 		z-index: 100;
 		position: relative;
 		border: 1px solid black;
+		height: 100%;
 	}
 
-	.empty_cell {
+	.grid_cell {
 		background-color: coral;
 		border: 1px solid black;
-		height: 20px;
+		// height: 20px;
 	}
 }
