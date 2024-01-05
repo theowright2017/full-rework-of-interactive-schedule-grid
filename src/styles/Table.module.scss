@@ -12,22 +12,33 @@ $dayCellBorder: red;
 	overflow: auto;
 }
 
-.table_wrap {
-	.table {
-		border-collapse: collapse;
-	}
+// .table_wrap {
+// 	.table {
+// 		border-collapse: collapse;
+// 	}
 
-	.header_row {
-		position: sticky;
-		top: 0;
-		left: 0;
-		z-index: 2;
-		background-color: lightgrey;
-	}
+// 	.header_row {
+// 		position: sticky;
+// 		top: 0;
+// 		left: 0;
+// 		z-index: 2;
+// 		background-color: lightgrey;
+// 	}
 
-	.header_cell {
-		width: 50px;
-	}
+// 	.header_cell {
+// 		width: 50px;
+// 	}
+// }
+
+.header_row {
+	position: sticky;
+	top: 0;
+	left: 0;
+	z-index: 2;
+	background-color: lightgrey;
+}
+.header_cell {
+	width: 50px;
 }
 
 .grid_row {
@@ -67,10 +78,16 @@ $dayCellBorder: red;
 
 .data_cell {
 	overflow: visible;
+	width: 50px;
 
 	.session_card {
 		overflow: visible;
-		width: 50px;
+		width: 100px;
+		background-color: lightseagreen;
+
+		position: absolute;
+		z-index: 10;
+		box-shadow: 5px 5px blue;
 
 		&.cardOpen {
 			height: 120px;
@@ -81,10 +98,7 @@ $dayCellBorder: red;
 	}
 
 	.session_contents {
-		width: 100px;
-		background-color: lightseagreen;
-		z-index: 100;
-		position: relative;
+		width: 100%;
 		border: 1px solid black;
 		height: 100%;
 	}
@@ -92,6 +106,5 @@ $dayCellBorder: red;
 	.grid_cell {
 		background-color: coral;
 		border: 1px solid black;
-		// height: 20px;
 	}
 }
