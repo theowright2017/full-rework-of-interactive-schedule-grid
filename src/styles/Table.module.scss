@@ -1,5 +1,10 @@
-$dayCellColour: lightblue;
-$dayCellBorder: red;
+$dayCellColour: #fafafa;
+$dayCellBorder: 1px solid #e8e8e8;
+$cellWidth: 6vw;
+$sessionWidth: 12vw;
+$rowHeight: 11vh;
+$sessionHeightOPEN: 16vh;
+$sessionHeightCLOSED: $rowHeight;
 
 .grid_wrapper {
 	display: flex;
@@ -12,99 +17,120 @@ $dayCellBorder: red;
 	overflow: auto;
 }
 
-// .table_wrap {
-// 	.table {
-// 		border-collapse: collapse;
-// 	}
-
-// 	.header_row {
-// 		position: sticky;
-// 		top: 0;
-// 		left: 0;
-// 		z-index: 2;
-// 		background-color: lightgrey;
-// 	}
-
-// 	.header_cell {
-// 		width: 50px;
-// 	}
-// }
-
 .header_row {
 	position: sticky;
 	top: 0;
 	left: 0;
 	z-index: 2;
-	background-color: lightgrey;
+	background-color: $dayCellColour;
+	border: $dayCellBorder;
 }
 .header_cell {
-	width: 50px;
+	width: $cellWidth;
+	border-right: $dayCellBorder;
+	font-weight: 400;
 }
 
 .grid_row {
 	.day_title_cell {
 		background-color: $dayCellColour;
 		height: 20px;
+		width: $cellWidth;
 		border-bottom: 1px solid $dayCellColour;
 
-		border-left: 1px solid $dayCellBorder;
-		border-right: 1px solid $dayCellBorder;
-		border-top: 1px solid $dayCellBorder;
+		border-left: $dayCellBorder;
+		border-right: $dayCellBorder;
+		border-top: $dayCellBorder;
 	}
 
 	.day_blank_cell {
 		background-color: $dayCellColour;
 		height: 20px;
+		width: $cellWidth;
+
 		border-bottom: 1px solid $dayCellColour;
 		border-top: 1px solid $dayCellColour;
 
-		border-left: 1px solid $dayCellBorder;
-		border-right: 1px solid $dayCellBorder;
+		border-left: $dayCellBorder;
+		border-right: $dayCellBorder;
+	}
+
+	.isLast {
+		border-bottom: $dayCellBorder;
+	}
+
+	&.rowOpen {
+		height: $sessionHeightOPEN;
+	}
+	&.rowClosed {
+		height: $rowHeight;
 	}
 }
 
-.grid_row,
+.header_cell,
+.day_title_cell,
+.session_contents {
+	overflow: hidden;
+}
+
+
 .day_blank_cell,
 .day_title_cell,
 .grid_cell {
 	&.rowOpen {
-		height: 120px;
+		height: $sessionHeightOPEN;
 	}
 
 	&.rowClosed {
-		height: 80px;
+		height: 100%;
 	}
 }
 
 .data_cell {
 	overflow: visible;
-	width: 50px;
+	width: $cellWidth;
+	position: relative;
+	height: 100%;
+
+	&.isTop {
+		border-top: $dayCellBorder;
+	}
+	&.isLast {
+		border-bottom: $dayCellBorder;
+	}
 
 	.session_card {
 		overflow: visible;
-		width: 100px;
-		background-color: lightseagreen;
+		width: $sessionWidth;
+		background-color: #f8f3c4;
+		// border: $dayCellBorder;
+		border-radius: 3px;
 
 		position: absolute;
+		top: 0;
 		z-index: 10;
-		box-shadow: 5px 5px blue;
+		// box-shadow: 0px 1px 1px darkgray;
+		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12),
+			0 3px 1px -2px rgba(0, 0, 0, 0.2);
 
 		&.cardOpen {
-			height: 120px;
+			height: $sessionHeightOPEN;
 		}
 		&.cardClosed {
-			height: 80px;
+			height: $sessionHeightCLOSED;
 		}
 	}
 
 	.session_contents {
 		width: 100%;
-		border: 1px solid black;
+		// border: 1px solid black;
 		height: 100%;
 	}
 
 	.grid_cell {
-		background-color: coral;
-		border: 1px solid black;
+		background-color: #f2f5ff;
+		// border: 1px solid black;
+		border-right: $dayCellBorder;
+		height: 100%;
 	}
 }

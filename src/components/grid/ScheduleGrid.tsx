@@ -22,88 +22,107 @@ type Props = {
 const ScheduleGrid = (props: Props) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 
-
 	const rows = props.data;
 
 	return (
-		<div className={styles.table}>
-			<div>
+		<div style={{padding: '10px 10px 10px 0', backgroundColor: 'white'}}>
+		<table className={styles.table}>
+			<thead>
 				{[...columnGenerator()].map((headerGroup) => (
-					<div
+					<tr
 						key={headerGroup.id}
 						className={styles.header_row}
 						style={{ display: "flex" }}
 					>
-						<div className={styles.header_cell}>Day</div>
+						<th className={styles.header_cell}></th>
 						{config.slotTimes.map((time) => (
-							<div key={time} className={styles.header_cell}>
+							<th key={time} className={styles.header_cell}>
 								{time}
-							</div>
+							</th>
 						))}
-					</div>
+					</tr>
 				))}
-			</div>
-			<div>
+			</thead>
+			<tbody>
 				<Virtuoso
 					style={{ height: "400px" }}
 					data={props.allSubRows}
 					itemContent={(subRowIndex, subRow) => {
+						const isTopSubOfDayRow = subRow.index === 0;
+						const isLastSubOfDayRow =
+							props.allSubRows[subRowIndex + 1]?.index === 0;
+
+						const borderClass = isTopSubOfDayRow
+							? styles.isTop
+							: isLastSubOfDayRow
+							? styles.isLast
+							: "";
+
 						return (
-							<TableRow key={subRowIndex}>
-								{(
-									rowIsOpen: Set<number>,
-									setRowIsOpen: Dispatch<SetStateAction<Set<number>>>
-								) => {
-									return (
-										<React.Fragment>
-											{subRow.index === 0 ? (
-												<DayCellWithTitle
-													rows={rows}
-													subRow={subRow}
-													rowIsOpen={rowIsOpen}
-												/>
-											) : (
-												<DayCellEmpty rowIsOpen={rowIsOpen} />
-											)}
-											{Array.from(
-												{
-													length:
-														config.lastAvailableSlotNum - config.tempslotStart,
-												},
-												(_, idx) => config.tempslotStart + idx
-											).map((slotNum, slotIndex) => {
-												const { subRowMap } = subRow!;
-												const slotHasItem = subRowMap.has(slotNum as SlotNum);
+							<React.Fragment>
+								{subRow.index === 0 && <SpacerRow />}
+								<TableRow key={subRowIndex}>
+									{(
+										rowIsOpen: Set<number>,
+										setRowIsOpen: Dispatch<SetStateAction<Set<number>>>
+									) => {
+										return (
+											<React.Fragment>
+												{subRow.index === 0 ? (
+													<td  className={borderClass}>
+														<DayCellWithTitle
+															rows={rows}
+															subRow={subRow}
+															rowIsOpen={rowIsOpen}
+														/>
+													</td>
+												) : (
+													<td  className={borderClass}>
+														<DayCellEmpty rowIsOpen={rowIsOpen} />
+													</td>
+												)}
+												{Array.from(
+													{
+														length:
+															config.lastAvailableSlotNum -
+															config.tempslotStart,
+													},
+													(_, idx) => config.tempslotStart + idx
+												).map((slotNum, slotIndex) => {
+													const { subRowMap } = subRow!;
+													const slotHasItem = subRowMap.has(slotNum as SlotNum);
 
-												const item = slotHasItem
-													? subRowMap.get(slotNum as number)
-													: undefined;
+													const item = slotHasItem
+														? subRowMap.get(slotNum as number)
+														: undefined;
 
-												return (
-													<div
-														key={`slotCell_${slotIndex}_${slotNum}`}
-														className={styles.data_cell}
-													>
-														{item ? (
-															<SlotCellWithItem
-																item={item}
-																rowIsOpen={rowIsOpen}
-																setRowIsOpen={setRowIsOpen}
-															/>
-														) : (
-															<SlotCellEmpty rowIsOpen={rowIsOpen} />
-														)}
-													</div>
-												);
-											})}
-										</React.Fragment>
-									);
-								}}
-							</TableRow>
+													return (
+														<td
+															key={`slotCell_${slotIndex}_${slotNum}`}
+															className={`${styles.data_cell} ${borderClass}`}
+														>
+															{item ? (
+																<SlotCellWithItem
+																	item={item}
+																	rowIsOpen={rowIsOpen}
+																	setRowIsOpen={setRowIsOpen}
+																/>
+															) : (
+																<SlotCellEmpty rowIsOpen={rowIsOpen} />
+															)}
+														</td>
+													);
+												})}
+											</React.Fragment>
+										);
+									}}
+								</TableRow>
+							</React.Fragment>
 						);
 					}}
 				/>
-			</div>
+			</tbody>
+		</table>
 		</div>
 	);
 };
@@ -119,12 +138,12 @@ const TableRow = (props: {
 	const [rowIsOpen, setRowIsOpen] = useState(new Set<number>());
 
 	return (
-		<div
-			className={`${styles.grid_row}`}
-			style={{ height: rowIsOpen.size > 0 ? "120px" : "80px", display: "flex" }}
+		<tr
+			className={`${styles.grid_row} ${rowIsOpen.size > 0 ? styles.rowOpen : styles.rowClosed}`}
+			style={{  display: "flex" }}
 		>
 			{props.children(rowIsOpen, setRowIsOpen)}
-		</div>
+		</tr>
 	);
 };
 
@@ -135,26 +154,22 @@ const DayCellWithTitle = (props: {
 }) => {
 	const { rows, subRow } = props;
 	return (
-		<div style={{ width: "50px" }}>
-			<div
-				className={`${styles.day_title_cell} ${
-					props.rowIsOpen.size > 0 ? styles.rowOpen : styles.rowClosed
-				}`}
-			>
-				{rows[subRow.dayIndex].day}
-			</div>
+		<div
+			className={`${styles.day_title_cell} ${
+				props.rowIsOpen.size > 0 ? styles.rowOpen : styles.rowClosed
+			}`}
+		>
+			{rows[subRow.dayIndex].day}
 		</div>
 	);
 };
 
 const DayCellEmpty = (props: { rowIsOpen: Set<number> }) => (
-	<div style={{ width: "50px" }}>
-		<div
-			className={`${styles.day_blank_cell} ${
-				props.rowIsOpen.size > 0 ? styles.rowOpen : styles.rowClosed
-			}`}
-		/>
-	</div>
+	<div
+		className={`${styles.day_blank_cell} ${
+			props.rowIsOpen.size > 0 ? styles.rowOpen : styles.rowClosed
+		}`}
+	/>
 );
 
 const SlotCellWithItem = (props: {
@@ -167,11 +182,12 @@ const SlotCellWithItem = (props: {
 	const { item, setRowIsOpen } = props;
 
 	return (
-		<div
-			className={`${styles.grid_cell} ${
-				props.rowIsOpen.size > 0 ? styles.rowOpen : styles.rowClosed
-			}`}
-		>
+		<React.Fragment>
+			<div
+				className={`${styles.grid_cell} ${
+					props.rowIsOpen.size > 0 ? styles.rowOpen : styles.rowClosed
+				}`}
+			></div>
 			<div
 				className={`${styles.session_card} ${
 					cardIsOpen ? styles.cardOpen : styles.cardClosed
@@ -190,7 +206,7 @@ const SlotCellWithItem = (props: {
 			>
 				<div className={styles.session_contents}>Session {item.id}</div>
 			</div>
-		</div>
+		</React.Fragment>
 	);
 };
 
@@ -200,8 +216,16 @@ const SlotCellEmpty = (props: { rowIsOpen: Set<number> }) => {
 			className={`${styles.grid_cell} ${
 				props.rowIsOpen.size > 0 ? styles.rowOpen : styles.rowClosed
 			}`}
-		>
-			Slot
-		</div>
+		></div>
 	);
 };
+
+const SpacerRow = () => (
+	<div
+		style={{
+			height: "30px",
+			width: "100%",
+			background: "#fafafa",
+		}}
+	></div>
+);
