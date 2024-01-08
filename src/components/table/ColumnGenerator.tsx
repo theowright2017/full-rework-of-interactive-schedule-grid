@@ -1,6 +1,6 @@
 import { Session } from "@/pages/api/SessionGenerator";
 import { createColumnHelper } from "@tanstack/react-table";
-import {  StaticDayRow, SlotNum, TimeSlot, config } from "./RowGenerator";
+import {  StaticDayRow } from "./RowGenerator";
 
 const columnHelper = createColumnHelper<StaticDayRow>();
 
