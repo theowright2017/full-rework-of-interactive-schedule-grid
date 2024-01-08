@@ -1,4 +1,5 @@
-import { Day, SlotNum } from "@/components/table/RowGenerator";
+import { Day } from "./config";
+
 
 export type ISODuration = {
 	ISODAY: number;
@@ -13,7 +14,7 @@ export type ISODuration = {
 
 export type Session = {
 	id: number;
-	day: Day;
+	// day: Day;
 	isoDuration: ISODuration;
 };
 
@@ -36,7 +37,7 @@ const isoGenerator = (
 };
 
 const isoList = [
-	isoGenerator(1, 1, 660, 720),
+	isoGenerator(1, 1, 660, 840),
 	isoGenerator(1, 1, 780, 840),
 	isoGenerator(1, 1, 780, 840),
 	isoGenerator(1, 1, 660, 720),
@@ -47,12 +48,12 @@ const isoList = [
 	isoGenerator(1, 1, 720, 820),
 ]
 
-export const sessionListGenerator = (day: Day, length: number): Session[] => {
+export const sessionListGenerator = (length: number): Session[] => {
 	const sessions = Array.from({ length: length }, (__, idx) => idx).map((index) => {
 		const isoDuration = isoList[Math.floor(Math.random() * 9)]
 		const session: Session = {
 			id: index,
-			day: day,
+			// day: day,
 			isoDuration: isoDuration,
 		};
 

@@ -1,15 +1,25 @@
 $dayCellColour: #fafafa;
 $dayCellBorder: 1px solid #e8e8e8;
-$cellWidth: 6vw;
+$cellWidth: 100%;
 $sessionWidth: 12vw;
 $rowHeight: 11vh;
 $sessionHeightOPEN: 16vh;
 $sessionHeightCLOSED: $rowHeight;
 
+// .grid_wrapper {
+// 	display: flex;
+// 	height: 300px;
+// 	overflow: auto;
+// }
+
 .grid_wrapper {
-	display: flex;
-	height: 300px;
-	overflow: auto;
+	background-color: white;
+	// width: 100%;
+	padding: 10px 10px 10px 0;
+}
+
+.table {
+	width: 100%;
 }
 
 .table_container {
@@ -26,7 +36,7 @@ $sessionHeightCLOSED: $rowHeight;
 	border: $dayCellBorder;
 }
 .header_cell {
-	width: $cellWidth;
+	// width: $cellWidth;
 	border-right: $dayCellBorder;
 	font-weight: 400;
 }
@@ -35,7 +45,7 @@ $sessionHeightCLOSED: $rowHeight;
 	.day_title_cell {
 		background-color: $dayCellColour;
 		height: 20px;
-		width: $cellWidth;
+		// width: $cellWidth;
 		border-bottom: 1px solid $dayCellColour;
 
 		border-left: $dayCellBorder;
@@ -46,7 +56,7 @@ $sessionHeightCLOSED: $rowHeight;
 	.day_blank_cell {
 		background-color: $dayCellColour;
 		height: 20px;
-		width: $cellWidth;
+		// width: $cellWidth;
 
 		border-bottom: 1px solid $dayCellColour;
 		border-top: 1px solid $dayCellColour;
@@ -88,7 +98,7 @@ $sessionHeightCLOSED: $rowHeight;
 
 .data_cell {
 	overflow: visible;
-	width: $cellWidth;
+	// width: $cellWidth;
 	position: relative;
 	height: 100%;
 
@@ -101,7 +111,7 @@ $sessionHeightCLOSED: $rowHeight;
 
 	.session_card {
 		overflow: visible;
-		width: $sessionWidth;
+		// width: $sessionWidth;
 		background-color: #f8f3c4;
 		// border: $dayCellBorder;
 		border-radius: 3px;
