@@ -81,6 +81,9 @@ This project is using the following technologies:
     - Requires further discussion and investigation
   - Previous grid rendered a list of divs and then visually styled to look like rows, requiring a full refresh on each card interaction
     - As we are now using a HTML table, each 'row' has its own state.  User interactions with cards now only re-render the individual row
+  - Drag and drop and other card / grid interactions can be easily added and functionality easily extended as required
+   
+  - Further revision is required to port into existing codebase.
 
 
 
